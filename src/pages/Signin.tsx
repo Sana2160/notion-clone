@@ -1,15 +1,52 @@
 import { authRepository } from "@/modules/auth/auth.repository";
+import { useCurrentUserStore } from "@/modules/auth/current-user.state";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const currentUserStore = useCurrentUserStore();
 
   const signin = async () => {
-    const user = await authRepository.signin(email, password);
-    console.log(user);
+    if (!email) {
+      alert("メールアドレスを入力してください");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("正しいメールアドレスを入力してください");
+      return;
+    }
+
+    if (!password) {
+      alert("パスワードを入力してください");
+      return;
+    }
+
+    try {
+      const user = await authRepository.signin(email, password);
+      currentUserStore.set(user);
+      alert("ログインに成功しました！");
+    } catch (error: unknown) {
+      console.error(error);
+
+      let message =
+        "ログインに失敗しました。メールアドレスまたはパスワードが正しくありません。";
+
+      if (
+        error instanceof Error &&
+        error.message.includes("Invalid login credentials")
+      ) {
+        message = "メールアドレスまたはパスワードが間違っています。";
+      }
+
+      alert(message);
+    }
   };
+
+  if (currentUserStore.currentUser != null) return <Navigate replace to="/" />;
 
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8">

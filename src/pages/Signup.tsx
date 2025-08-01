@@ -1,10 +1,13 @@
 import { authRepository } from "@/modules/auth/auth.repository";
+import { useCurrentUserStore } from "@/modules/auth/current-user.state";
 import { useState } from "react";
+import { Navigate } from "react-router-dom";
 
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const currentUserStore = useCurrentUserStore();
 
   const signup = async () => {
     if (!name) {
@@ -33,7 +36,7 @@ function Signup() {
 
     try {
       const user = await authRepository.signup(name, email, password);
-      console.log(user);
+      currentUserStore.set(user);
       alert("登録が完了しました！");
     } catch (error: unknown) {
       console.error(error);
@@ -60,6 +63,7 @@ function Signup() {
       alert(message);
     }
   };
+  if (currentUserStore.currentUser != null) return <Navigate replace to="/" />;
 
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8">

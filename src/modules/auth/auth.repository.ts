@@ -10,7 +10,7 @@ export const authRepository = {
     if (error != null || data.user == null) throw new Error(error?.message);
     return {
       ...data.user,
-      userName: data.user.user_metadata.name, //毎回右の形で取るようなのでuserNameに代入する
+      userName: data.user.user_metadata.name, //毎回右の形を取るようなので格納
     };
   },
   async signin(email: string, password: string) {
@@ -21,7 +21,23 @@ export const authRepository = {
     if (error != null || data.user == null) throw new Error(error?.message);
     return {
       ...data.user,
-      username: data.user.user_metadata.name,
+      userName: data.user.user_metadata.name,
     };
+  },
+
+  async getCurrentUser() {
+    const { data, error } = await supabase.auth.getSession();
+    if (error != null) throw new Error(error.message);
+    if (data.session == null) return;
+    return {
+      ...data.session.user,
+      userName: data.session.user.user_metadata.name,
+    };
+  },
+
+  async signout() {
+    const { error } = await supabase.auth.signOut();
+    if (error != null) throw new Error(error.message);
+    return true;
   },
 };
