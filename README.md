@@ -1,3 +1,44 @@
+# Notion Clone (開発中)
+
+## 📌 概要
+
+このアプリは、React と TypeScript を用いて開発中の Notion クローンアプリです。ページの追加・編集・切り替えといった基本的なノート機能を備え、直感的なUIで複数ページの管理ができることを目指しています。
+
+データの保存には Supabase を使用しており、リアルタイムでの読み書きやユーザーごとのページ管理を想定した構成になっています。
+
+## 🎯 目的
+
+- Notion風のUI/UXの再現
+- Supabase によるバックエンド設計と認証の習得
+- 型安全な大規模Reactアプリケーションの構築練習
+
+## 🚧 現在の実装状況
+
+- [x] ログインページ UI（※将来的にSupabase Authと連携予定）
+- [x] サイドバー／ページ一覧 UI
+- [x] ページごとのテキスト表示・選択
+- [x] Supabase 経由でのページデータ読み書き
+- [ ] ページ作成／削除
+- [ ] 認証によるユーザー別のデータ管理
+- [ ] リッチテキストエディタ機能（検討中）
+
+## 🔧 使用技術
+
+- **React**
+- **TypeScript**
+- **Supabase**
+  - Database（PostgreSQL）
+  - Auth（今後導入予定）
+- **React Router**
+- **Tailwind CSS**（スタイリング）
+- **ESLint / Prettier**
+
+## 💡 工夫した点
+
+- Supabase の `useEffect + async` でデータをフェッチし、ページ読み込みを軽量に保つ
+- React Router を使ったページ別ルーティングと動的URL管理
+- Context API を使ってアプリ全体の状態を一元管理（今後 Zustand などの導入も検討）
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
